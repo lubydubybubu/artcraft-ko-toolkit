@@ -9,6 +9,7 @@ if(-not (Test-Path "$T\cargo\bin\cargo.exe")){
   Invoke-WebRequest https://static.rust-lang.org/rustup/dist/x86_64-pc-windows-msvc/rustup-init.exe -OutFile rustup-init.exe
   & .\rustup-init.exe -y --no-modify-path --profile minimal --default-host x86_64-pc-windows-gnullvm --default-toolchain 1.95.0 *> "$T\rustup-init.log"; "rustup-init exit=$LASTEXITCODE" }
 $env:PATH="$T\cargo\bin;$T\llvm-mingw\bin;$env:PATH"
+& rustup toolchain install 1.95.0-x86_64-pc-windows-gnullvm --profile minimal *> "$T\toolchain.log"; & rustup default 1.95.0-x86_64-pc-windows-gnullvm *>> "$T\toolchain.log"
 rustc -vV 2>&1 | Out-String; & x86_64-w64-mingw32-clang --version | Select-Object -First 1
 # smoke: hello world with a C dependency-free binary + proc-macro
 $s="$T\smoke"; if(Test-Path $s){Remove-Item -Recurse -Force $s}; cargo new -q --vcs none $s; Set-Location $s
