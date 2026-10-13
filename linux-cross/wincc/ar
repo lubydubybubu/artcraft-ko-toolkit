@@ -1,0 +1,2 @@
+#!/bin/bash
+exec "${ZIG:?set ZIG to the zig binary}" ar "$@"

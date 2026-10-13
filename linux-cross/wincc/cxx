@@ -1,0 +1,25 @@
+#!/bin/bash
+# zig c++ wrapper for x86_64-pc-windows-gnu: resolve crate-bundled import libs, drop msvcrt/gcc libs
+libdirs=()
+prev=""
+for a in "$@"; do
+  if [ "$prev" = "-L" ]; then libdirs+=("$a"); fi
+  case "$a" in -L?*) libdirs+=("${a#-L}");; esac
+  prev="$a"
+done
+args=()
+for a in "$@"; do
+  case "$a" in
+    --target=*|-lgcc_s|-lgcc|-l:libpthread.a|-lpthread|-lmsvcrt|-lmingwex|-lmingw32|-fno-use-linker-plugin) continue;;
+    -Wl,--disable-auto-image-base|-Wl,--dynamicbase|-Wl,--nxcompat|-Wl,--large-address-aware|-Wl,--high-entropy-va|-Wl,-O1) continue;;
+    -lgcc_eh) args+=("-lunwind");;
+    -l*)
+      n="${a#-l}"; found=""
+      for L in "${libdirs[@]}"; do
+        if [ -f "$L/lib$n.a" ]; then found="$L/lib$n.a"; break; fi
+      done
+      if [ -n "$found" ]; then args+=("$found"); else args+=("$a"); fi;;
+    *) args+=("$a");;
+  esac
+done
+exec "${ZIG:?set ZIG to the zig binary}" c++ -target x86_64-windows-gnu "${args[@]}"
