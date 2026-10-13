@@ -1,5 +1,5 @@
 #!/bin/bash
-# Commit and push a patch repo (or this toolkit) to a PRIVATE GitHub repo of the owner after a secret scan.
+# Commit and push a patch repo (or this toolkit) to a GitHub repo (created private; change visibility deliberately) after a secret scan.
 # Usage: publish.sh LOCAL_REPO_DIR GITHUB_REPO_NAME "commit message"
 set -euo pipefail
 DIR=$1; NAME=$2; MSG=$3

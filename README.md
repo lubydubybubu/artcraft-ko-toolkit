@@ -17,8 +17,8 @@ repository as a patch file; upstream ArtCraft source code is never copied here.
 - `windows-native/` build natively on a Windows PC (no admin, no MSVC): Rust 1.95 `x86_64-pc-windows-gnullvm`
   + llvm-mingw in `tools\`. `setup.ps1` once, then
   `build.ps1 -Repo C:\src\app -Log build.log -Pkgs app,app-cli` (BelowNormal priority, shared target dir
-  so later apps reuse egui/wgpu builds). WordCraft clean release build: 4m44s on a Ryzen 9 7900X3D
-  vs ~40 min on the 2-vCPU Linux VM.
+  so later apps reuse egui/wgpu builds). A clean WordCraft release build takes minutes on a desktop CPU
+  instead of most of an hour on a small 2-vCPU VM.
 - `export-patch.py` export a working tree's changes (tracked + new files) as one patch against the
   upstream tag and prove it applies to a pristine checkout.
 - `publish.sh` gitleaks scan → commit → push to a private repo → verify remote SHA.
